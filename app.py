@@ -19,7 +19,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-	return models.Org_user.get(models.Org_User.id == user_id)
+	return models.Org_user.get(models.Org_user.id == user_id)
 
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
 
