@@ -20,13 +20,12 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-
-	# client = models.Client.get(models.Client.id == user_id)
+	try:
+		models.Client.get(models.Client.id == user_id)
+		return models.Client.get(models.Client.id == user_id)
 	
-	# if client == None:
+	except models.DoesNotExist:
 		return models.Org_user.get(models.Org_user.id == user_id)
-	# else:
-	# 	return client
 
 
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
