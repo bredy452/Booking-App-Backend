@@ -36,7 +36,7 @@ def register_orgs():
 		), 401
 	except models.DoesNotExist:
 		payload['password'] = generate_password_hash(payload['password'])
-		created_user = models.Org_user.create(
+		created_org_user = models.Org_user.create(
 			**payload
 		)
 
@@ -46,7 +46,7 @@ def register_orgs():
 	created_org_user_dict.pop('password')
 
 	return jsonify(
-		data = created_user_dict,
+		data = created_org_user_dict,
 		message = "Successfull registered organization user",
 		status = 201
 	), 201

@@ -22,6 +22,7 @@ class Org_user(UserMixin, Model):
 class Client(UserMixin, Model):
 	first_name = CharField(null=False)
 	last_name = CharField(null=False)
+	phone_number = CharField()
 	username = CharField(null=False)
 	email = CharField(null=False)
 	password = CharField(null=False)
@@ -30,11 +31,21 @@ class Client(UserMixin, Model):
 	class Meta:
 		database = DATABASE
 
+# class Schedule(Model):
+# 	info= CharField()
+# 	org_id = ForeignKeyField(Org_user, backref='schedule')
+# 	date = CharField()
+# 	client_id = ForeignKeyField(Client, backref='my_schedule')
+
+# 	class Meta:
+# 		database = DATABASE
+
 class Schedule(Model):
-	info= CharField()
+	availability = CharField()
+	# info = CharField()
 	org_id = ForeignKeyField(Org_user, backref='schedule')
-	date = CharField()
-	client_id = ForeignKeyField(Client, backref='my_schedule')
+	# date = CharField()
+	# client_id = ForeignKeyField(Client, backref='my_schedule')
 
 	class Meta:
 		database = DATABASE
