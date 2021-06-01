@@ -28,3 +28,31 @@ def view_schedule():
 		'status': 200 
 	}), 200
 
+@schedules.route('/<organization>', methods=['GET'])
+def get_one_schedule(organization):
+	record = models.Org_user.get(models.Org_user.org_name == organization)
+
+	schedule = models.Schedule.get(models.Schedule.org_id == record.id)
+
+
+# models.Schedule.get()
+	
+
+	return jsonify(
+		data = model_to_dict(schedule),
+		message = 'Success!!!',
+		status = 200
+	), 200
+
+@schedules.route('/org_user/<id>', methods=['DELETE'])
+def delete_schedule(id):
+
+	models.Org_user.delete().where(models.Org_user.id==id).execute()
+
+	return jsonify(
+		data = None,
+		status = 200,
+		message = 'schedule deleted successfully'
+	), 200
+
+

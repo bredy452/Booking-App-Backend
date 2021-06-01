@@ -20,6 +20,16 @@ def user_list():
 		'status': 200
 		}), 200
 
+@users.route('/organizations', methods=['GET'])
+def organizations():
+	org_dicts = [model_to_dict(org) for org in models.Org_user.select()]
+	
+	return jsonify({
+		'organizations': [org_dicts],
+		'message': f'Successfully found {len(org_dicts)} Organization Users',
+		'status': 200
+	}), 200
+
 #Routes for organization users	
 @users.route('/org_user/register', methods=['POST'])
 def register_orgs():
@@ -119,7 +129,7 @@ def login_client():
 	try:
 		client_user = models.Client.get(models.Client.username == payload['username'])
 		user_client_dict = model_to_dict(client_user)
-		passwor_is_good = check_password_hash(user_client_dict['password'], payload['password'])
+		password_is_good = check_password_hash(user_client_dict['password'], payload['password'])
 
 		if (password_is_good):
 			login_user(client_user)
