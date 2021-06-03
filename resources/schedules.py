@@ -44,6 +44,25 @@ def get_one_schedule(organization):
 		status = 200
 	), 200
 
+@schedules.route('/client_schedule/<organization>', methods=['GET'])
+def client_schedule(organization):
+	org_id = models.Org_user.get(models.Org_user.org_name == organization)
+	record = models.Client_schedule.get(models.Client_schedule.org_id == org_id.id)
+	
+
+	return jsonify({
+		'data': model_to_dict(record),
+		'message': f'Successfully found',
+		'status': 200 
+	}), 200
+
+
+
+
+
+
+
+
 @schedules.route('/org_user/<id>', methods=['DELETE'])
 def delete_schedule(id):
 
@@ -70,3 +89,6 @@ def add_booking_dates():
 		message = "successfully created schedule",
 		status = 201
 	), 201
+
+
+
