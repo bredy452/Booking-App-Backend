@@ -55,4 +55,18 @@ def delete_schedule(id):
 		message = 'schedule deleted successfully'
 	), 200
 
+@schedules.route('/client/bookDate', methods=['POST'])
+def add_booking_dates():
+	payload = request.get_json()
+	org_id = models.Org_user.get(models.Org_user.org_name == payload['org_id'])
+	booking_dates = models.Client_schedule.create(client_availability=payload['client_availability'], client_id=current_user.id, org_id = org_id.id )
+	schedule_dict = model_to_dict(booking_dates)
 
+	# return model_to_dict(org_id)
+
+
+	return jsonify(
+		data = schedule_dict,
+		message = "successfully created schedule",
+		status = 201
+	), 201
