@@ -22,45 +22,64 @@ def add_schedule():
 def view_schedule():
 	org_schedule_dicts = [model_to_dict(schedule) for schedule in current_user.schedule]
 
-	return jsonify({
-		'data': org_schedule_dicts,
-		'message': f'Successfully found {len(org_schedule_dicts)} schedule',
-		'status': 200 
-	}), 200
+	return jsonify(
+		data = org_schedule_dicts,
+		message = f'Successfully found {len(org_schedule_dicts)} schedule',
+		status = 200 
+	), 200
+
+@schedules.route('/org_user/editSchedule/<id>', methods=['Put'])
+def edit_schedule(id):
+	payload = request.get_json()
+
+	models.Schedule.update(**payload).where(models.Schedule.org_id.id==id)
+	# new_schedule = models.Schedule.create(availability=payload['availability'], org_id=current_user.id)
+	# schedule_dict = model_to_dict(new_schedule)
+
+	return jsonify(
+		data = model_to_dict(models.Schedule.get_by_id(id)),
+		message = "successfully updated schedule",
+		status = 201
+	), 201
 
 @schedules.route('/<organization>', methods=['GET'])
 def get_one_schedule(organization):
-	record = models.Org_user.get(models.Org_user.org_name == organization)
+	try:
+		record = models.Org_user.get(models.Org_user.org_name == organization)
 
-	schedule = models.Schedule.get(models.Schedule.org_id == record.id)
+		schedule = models.Schedule.get(models.Schedule.org_id == record.id)
 
-
-# models.Schedule.get()
-	
-
-	return jsonify(
-		data = model_to_dict(schedule),
-		message = 'Success!!!',
-		status = 200
+		return jsonify(
+			data = model_to_dict(schedule),
+			message = 'Success!!!',
+			status = 200
 	), 200
+
+	except models.DoesNotExist:
+		return jsonify(
+			data = {},
+			message = "Schedule does not exist",
+			status = 200 
+		), 200
 
 @schedules.route('/client_schedule/<organization>', methods=['GET'])
 def client_schedule(organization):
-	org_id = models.Org_user.get(models.Org_user.org_name == organization)
-	record = models.Client_schedule.get(models.Client_schedule.org_id == org_id.id)
+	try:
+		org_id = models.Org_user.get(models.Org_user.org_name == organization)
+		record = models.Client_schedule.get(models.Client_schedule.org_id == org_id.id)
 	
 
-	return jsonify({
-		'data': model_to_dict(record),
-		'message': f'Successfully found',
-		'status': 200 
-	}), 200
-
-
-
-
-
-
+		return jsonify(
+			data = model_to_dict(record),
+			message= f'Successfully found',
+			status= 200 
+		), 200
+	except models.DoesNotExist:
+		return jsonify(
+			data = {},
+			message = "Schedule does not exist",
+			status = 204 
+		), 204
 
 
 @schedules.route('/org_user/<id>', methods=['DELETE'])
