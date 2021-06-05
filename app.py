@@ -12,6 +12,12 @@ load_dotenv()
 DEBUG = True
 PORT = 8000
 app = Flask(__name__)
+
+app.config.update(
+  SESSION_COOKIE_SECURE=True,
+  SESSION_COOKIE_SAMESITE='None'
+)
+
 CORS(users, origins= ['http://localhost:3000'], supports_credentials=True)
 CORS(schedules, origins= ['http://localhost:3000'], supports_credentials=True)
 
@@ -22,7 +28,8 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-	if hasattr('Client', 'schedule'):
+	print("CHECK ME OUT", user_id)
+	if hasattr(user_id, 'org_name'):
 		# models.Client.get(models.Client.id == user_id)
 		return models.Client.get(models.Client.id == user_id)
 	

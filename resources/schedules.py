@@ -28,19 +28,20 @@ def view_schedule():
 		status = 200 
 	), 200
 
-@schedules.route('/org_user/editSchedule/<id>', methods=['Put'])
+@schedules.route('/org_user/editSchedule/<id>', methods=['PUT'])
 def edit_schedule(id):
 	payload = request.get_json()
 
-	models.Schedule.update(**payload).where(models.Schedule.org_id.id==id)
-	# new_schedule = models.Schedule.create(availability=payload['availability'], org_id=current_user.id)
-	# schedule_dict = model_to_dict(new_schedule)
+	models.Schedule.update(**payload).where(models.Schedule.id == id).execute()
+	
+
+	# return payload['availability']
 
 	return jsonify(
 		data = model_to_dict(models.Schedule.get_by_id(id)),
 		message = "successfully updated schedule",
 		status = 201
-	), 201
+	 ), 201
 
 @schedules.route('/<organization>', methods=['GET'])
 def get_one_schedule(organization):
@@ -78,8 +79,8 @@ def client_schedule(organization):
 		return jsonify(
 			data = {},
 			message = "Schedule does not exist",
-			status = 204 
-		), 204
+			status = 200 
+		), 200
 
 
 @schedules.route('/org_user/<id>', methods=['DELETE'])
@@ -95,8 +96,11 @@ def delete_schedule(id):
 
 @schedules.route('/client/bookDate', methods=['POST'])
 def add_booking_dates():
+	print("THIS IS THE CURRENT USER ", current_user)
 	payload = request.get_json()
+	print("THIS IS PAYLOAD ", payload)
 	org_id = models.Org_user.get(models.Org_user.org_name == payload['org_id'])
+	print("HEREEE ", org_id)
 	booking_dates = models.Client_schedule.create(client_availability=payload['client_availability'], client_id=current_user.id, org_id = org_id.id )
 	schedule_dict = model_to_dict(booking_dates)
 

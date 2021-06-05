@@ -91,6 +91,7 @@ def login_org_():
 			message = "Email or password is incorrect",
 			status = 401
 		), 401
+	console.log(user_id)
 
 #Routes for client users
 @users.route('/client/register', methods=['POST'])
