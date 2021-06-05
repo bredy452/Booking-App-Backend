@@ -18,8 +18,8 @@ app.config.update(
   SESSION_COOKIE_SAMESITE='None'
 )
 
-CORS(users, origins= ['http://localhost:3000', 'https://convenientbooking-app.herokuapp.com' ], supports_credentials=True)
-CORS(schedules, origins= ['http://localhost:3000', 'https://convenientbooking-app.herokuapp.com'], supports_credentials=True)
+CORS(users, origins= ['http://localhost:3000'], supports_credentials=True)
+CORS(schedules, origins= ['http://localhost:3000'], supports_credentials=True)
 
 app.secret_key = os.environ.get("FLASK_APP_SECRET")
 
