@@ -21,8 +21,8 @@ app.config.update(
 CORS(users, origins= ['http://localhost:3000','https://convenientbooking-app-frontend.herokuapp.com'], supports_credentials=True)
 CORS(schedules, origins= ['http://localhost:3000', 'https://convenientbooking-app-frontend.herokuapp.com' ], supports_credentials=True)
 
-# app.secret_key = os.environ.get("FLASK_APP_SECRET")
-app.secret_key = "hello"
+app.secret_key = os.environ.get('FLASK_APP_SECRET')
+# app.secret_key = "hello"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -45,11 +45,11 @@ def before_request():
     print("you should see this before each request")
     models.DATABASE.connect()
 
-@after_this_request 
-def after_request(response):
-    print("you should see this after each request") 
-    models.DATABASE.close()
-    return response 
+    @after_this_request 
+    def after_request(response):
+        print("you should see this after each request") 
+        models.DATABASE.close()
+        return response 
 
 
 if __name__ == '__main__':
